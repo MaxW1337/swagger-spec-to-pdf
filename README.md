@@ -61,8 +61,8 @@ In the case of a YAML input file, steps 1-2 are bypassed.
 
 #### Swagger Editor
 
-Version of swagger editor embedded is: 3.6.37
-You can get it from: [here](https://github.com/swagger-api/swagger-editor/releases/latest)
+This Application uses the [swagger-editor-dist](https://github.com/swagger-api/swagger-editor) version of Swagger Editor
+
 If you want to use some other version:
 
 * clone the repo
