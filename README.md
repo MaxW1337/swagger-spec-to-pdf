@@ -1,11 +1,14 @@
 # swagger-spec-to-pdf
 
 [![codebeat badge](https://codebeat.co/badges/d512c584-5af6-4cf8-80a8-7210662487a4)](https://codebeat.co/projects/github-com-maxw1337-swagger-spec-to-pdf-master)
-![dependabot badge](https://api.dependabot.com/badges/status?host=github&repo=maxw1337/swagger-spec-to-pdf)
+![dependabot badge](https://api.dependabot.com/badges/status?host=github&repo=MaxW1337/swagger-spec-to-pdf)
+![david-dm badge](https://david-dm.org/MaxW1337/swagger-spec-to-pdf.svg)
+
+Originally forked from [agreatfool swagger-spec-to-pdf](https://github.com/agreatfool/swagger-spec-to-pdf)
 
 ## Install
 
-`npm install -g swagger-spec-to-pdf`
+`npm install -g MaxW1337/swagger-spec-to-pdf`
 
 ### Usage
 
@@ -24,11 +27,11 @@
 
 For JSON files:
 
-swagger2pdf -j -s ./swagger-spec-sample.json -o ./dump/
+    swagger2pdf -j -s ./swagger-spec-sample.json -o ./dump/
 
 For YAML files:
 
-swagger2pdf -y -s ./swagger-spec-sample.yaml -o ./dump/
+    swagger2pdf -y -s ./swagger-spec-sample.yaml -o ./dump/
 
 In either case, the execution will take several seconds to complete.
 
