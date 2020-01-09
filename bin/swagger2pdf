@@ -22,16 +22,18 @@ cli.addArgument(['-o', '--output'], {
   help:   'Output path of the pdf file.'
 });
 
-var libPath = require('path');
-var libFs = require('fs');
-var libCp = require('child_process');
-var libYaml = require('yaml-js');
+var path = require('path')
+var fs = require('fs')
+var cp = require('child_process')
+var libYaml = require('yaml-js')
+var express = require('express')
+var app = express()
+var path = require('path')
 
 var rootPath = process.cwd();
-var editorPath = libPath.join(__dirname, '..', 'node_modules','swagger-editor-dist');
-var editorSpecPath = libPath.join(editorPath, '');
+var editorSpecPath = path.join(editorPath, '');
 var httpServerPath = 'http-server';
-var electronScript = libPath.join(__dirname, '..', 'src', 'electron_exec.js');
+var electronScript = path.join(__dirname, '..', 'src', 'electron_exec.js');
 var electronPath = require('electron');
 
 var parsePath = function(input) {
@@ -40,12 +42,12 @@ var parsePath = function(input) {
   if (!(input != null)) {
     return rootPath;
   }
-  output = libPath.normalize(input);
+  output = path.normalize(input);
   if (output.length === 0) {
     return rootPath;
   }
   if (output.charAt(0) !== '/') {
-    output = libPath.normalize(rootPath + '/./' + output);
+    output = path.normalize(rootPath + '/./' + output);
   }
   if (output.length > 1 && output.charAt(output.length - 1) === '/') {
     return output.substr(0, output.length - 1);
@@ -66,53 +68,61 @@ try {
   }
 
   // ensure source file
-  var srcStatus = libFs.statSync(src);
+  var srcStatus = fs.statSync(src);
   if (!srcStatus || !srcStatus.isFile()) {
     process.stderr.write('Source swagger spec not found: ' + src);
   }
 
   // ensure output dir
-  var outputStatus = libFs.statSync(output);
+  var outputStatus = fs.statSync(output);
   if (!outputStatus || !outputStatus.isDirectory()) {
     process.stderr.write('Output dir not found: ' + output);
   }
 
   if (inputJson) {
     // read json spec & dump converted yaml into swagger editor spec dir
-    var specJson = JSON.parse(libFs.readFileSync(src));
-    libFs.writeFileSync(libPath.join(editorSpecPath, 'default.yaml'), libYaml.dump(specJson));
+    var specJson = JSON.parse(fs.readFileSync(src));
+    fs.writeFileSync(path.join(editorSpecPath, 'default.yaml'), libYaml.dump(specJson));
   } else {
     // if the source file is in YAML format already, simply copy it to the spec dir
-    libFs.copyFileSync(src, libPath.join(editorSpecPath, 'default.yaml'));
+    fs.copyFileSync(src, path.join(editorSpecPath, 'default.yaml'));
   }
 
   // start http server serving the editor site
-  var httpServerSpawned = false;
-  var httpServerProcess = null;
-  var httpServerPathWatcher = setInterval(function() {
-    if (!httpServerPath) {
-      return;
-    }
-    clearInterval(httpServerPathWatcher);
+app.get('/', function(req, res) {
+    res.sendFile(editorPath + '/index.html');
+});
 
-    if (process.platform === 'win32') {
-      httpServerProcess = libCp.spawn(process.env.comspec, ['/c', httpServerPath, editorPath, '-p 19849', '-c -1']);
-    } else {
-      httpServerProcess = libCp.spawn(httpServerPath, [editorPath, '-p 19849', '-c -1']);
-    }
-    httpServerProcess.stdout.on('data', function(data) {
-      console.log(data.toString());
-      httpServerSpawned = true;
-    });
-  }, 100); // 0.1s
+app.listen(19849);
+let httpServerSpawned = true
 
+  // var httpServerSpawned = false;
+  // var httpServerProcess = null;
+  // var httpServerPathWatcher = setInterval(function() {
+  //   if (!httpServerPath) {
+  //     return;
+  //   }
+  //   clearInterval(httpServerPathWatcher);
+
+  //   if (process.platform === 'win32') {
+  //     httpServerProcess = cp.spawn(process.env.comspec, ['/c', httpServerPath, editorPath, '-p 19849', '-c -1']);
+  //   } else {
+  //     httpServerProcess = cp.spawn(httpServerPath, [editorPath, '-p 19849', '-c -1']);
+  //   }
+  //   httpServerProcess.stdout.on('data', function(data) {
+  //     console.log(data.toString());
+  //     httpServerSpawned = true;
+  //   });
+  // }, 100); // 0.1s
+
+// wait for httpserver serving swagger-editor and start electron app when ready
   var watcher = setInterval(function() {
     if (!httpServerSpawned) {
       return;
     }
     clearInterval(watcher);
 
-    var electronProcess = libCp.spawn(electronPath, [electronScript, output]);
+    var electronProcess = cp.spawn(electronPath, [electronScript, output]);
     electronProcess.stdout.on('data', function(data) {
       console.log(data.toString());
     });
