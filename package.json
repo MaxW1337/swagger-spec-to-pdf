@@ -4,6 +4,7 @@
   "description": "Dump swagger spec into pdf document.",
   "main": "index.js",
   "scripts": {
+    "preinstall": "npm i -g http-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
@@ -26,9 +27,8 @@
   "homepage": "https://github.com/MaxW1337/swagger-spec-to-pdf#readme",
   "dependencies": {
     "argparse": "1.0.10",
-    "electron": "7.1.1",
-    "http-server": "0.11.1",
-    "swagger-editor-dist": "3.7.0",
+    "electron": "7.1.8",
+    "swagger-editor-dist": "3.7.1",
     "yaml-js": "0.2.3"
   }
 }

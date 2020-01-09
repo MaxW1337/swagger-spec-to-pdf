@@ -30,7 +30,7 @@ var libYaml = require('yaml-js');
 var rootPath = process.cwd();
 var editorPath = libPath.join(__dirname, '..', 'node_modules','swagger-editor-dist');
 var editorSpecPath = libPath.join(editorPath, '');
-var httpServerPath = libPath.join(__dirname, '..', 'node_modules','http-server');
+var httpServerPath = 'http-server';
 var electronScript = libPath.join(__dirname, '..', 'src', 'electron_exec.js');
 var electronPath = require('electron');
 
