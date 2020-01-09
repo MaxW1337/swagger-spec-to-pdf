@@ -1,25 +1,28 @@
-"use strict";
+"use strict"
 
-var electron = require('electron');
-var app = electron.app;
-var BrowserWindow = electron.BrowserWindow;
+var electron = require('electron')
+var app = electron.app
+var BrowserWindow = electron.BrowserWindow
 
-app.commandLine.appendSwitch('--disable-http-cache');
+console.log("CLI Parameters: " + process.argv)
+
+app.commandLine.appendSwitch('--disable-http-cache')
 app.on('ready', function() {
-  var win = new BrowserWindow({ width: 800, height: 600, webPreferences: { nodeIntegration: false }});
-  win.loadURL('http://127.0.0.1:19849/?url=http://127.0.0.1:19849/default.yaml&docExpansion=full', { "extraHeaders" : "pragma: no-cache\n" });
+  var win = new BrowserWindow({ width: 800, height: 600, webPreferences: { nodeIntegration: false }})
+  win.loadURL('http://127.0.0.1:19849/?url=http://127.0.0.1:19849/default.yaml&docExpansion=full', { "extraHeaders" : "pragma: no-cache\n" })
   win.webContents.on("did-finish-load", function() {
-    console.log('Swagger editor loaded');
+    console.log('Swagger editor loaded')
     setTimeout(function() {
-      win.webContents.printToPDF({ pageSize: 'A4', landscape: false, printBackground: true }, function(error, data) {
-        if (error) throw error;
+      win.webContents.printToPDF({ pageSize: 'A4', landscape: false, printBackground: true }).then((data)=> {
+        console.log("PDF printed")
         require('fs').writeFile(require('path').join(process.argv[2], 'api.pdf'), data, function(error) {
-          if (error)
-            throw error;
-          console.log("Write PDF successfully.");
-          win.destroy();
+          if (error) throw error
+          win.destroy()
         })
-      });
-    }, 5000);
-  });
-});
+      }).catch((error) => {
+        console.log(error)
+        throw error
+      })
+    }, 2500)
+  })
+})
