@@ -27,7 +27,7 @@
   "homepage": "https://github.com/MaxW1337/swagger-spec-to-pdf#readme",
   "dependencies": {
     "argparse": "1.0.10",
-    "electron": "9.0.0",
+    "electron": "9.0.1",
     "swagger-editor-dist": "3.10.0",
     "yaml-js": "0.2.3"
   }
