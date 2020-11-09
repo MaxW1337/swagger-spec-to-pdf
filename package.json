@@ -28,7 +28,7 @@
   "dependencies": {
     "argparse": "2.0.1",
     "electron": "10.1.5",
-    "swagger-editor-dist": "3.14.5",
+    "swagger-editor-dist": "3.14.6",
     "yaml-js": "0.2.3"
   }
 }
